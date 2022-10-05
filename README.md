@@ -8,7 +8,7 @@
 
 ## Features
 - Scrapes username, profile photo and bio of members in given text channel
-- Optional HTTP HTTPS proxy support
+- Optional HTTP&HTTPS proxy support
 
 ## Usage
 1. Run `install_modules.bat`
@@ -19,7 +19,7 @@
 
 ## Stars
 
-30 Stars = Scrape different servers at the same time
+🌟 30 Stars = Scrape different servers at the same time 🌟
 
 ## DISCLAIMER
 This github repo is for EDUCATIONAL PURPOSES ONLY. I am NOT under any responsibility if a problem occurs.

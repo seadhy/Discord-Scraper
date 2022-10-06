@@ -58,6 +58,7 @@ class Tools:
         if want_proxy: self.proxies = open('proxies.txt','r',encoding='utf-8').read().splitlines()
         self.usernames = open('Scrapes/usernames.txt','r',encoding='utf-8').read().splitlines()
         self.token = json.load(open('config.json','r',encoding='utf-8'))['account_token']
+        
         self.scraped_counter = 0
         self.param = {
             "limit": 100
@@ -72,7 +73,9 @@ class Tools:
         self.y = Fore.LIGHTYELLOW_EX
         
         title(f'Discord Username ^& PFP ^& Bio Scraper  ^| Total Scraped: {self.scraped_counter}  ^|  Made by seadhy#9999')
-            
+        if self.token == 'enter account token': 
+            print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> Enter Account Token in config.json!')
+            sleep(9999)
     def scrapeInfo(self,channelid: str, want_proxy: bool):
         file_number = len(next(walk('Scrapes/Images/'))[2])
         
@@ -92,6 +95,7 @@ class Tools:
                 r = requests.get(f'https://discord.com/api/v9/channels/{channelid}/messages',params=self.param,headers=headers)
 
                 for info in r.json():
+
                     username = info['author']['username']
                     userid = info['author']['id']
                     userpfp = info['author']['avatar']
@@ -120,8 +124,12 @@ class Tools:
                         file_number += 1
                         self.scraped_counter += 1
                         title(f'Discord Username ^& PFP ^& Bio Scraper  ^|  Total Scraped: {self.scraped_counter}  ^|  Made by seadhy#9999')
-                        with open(f'Scrapes/Images/images-{file_number}.jpg','wb') as down_file:
-                            copyfileobj(r2.raw, down_file)
+                        if userpfp != None:
+                            with open(f'Scrapes/Images/images-{file_number}.jpg','wb') as down_file:
+                                copyfileobj(r2.raw, down_file)
+                                
+                        else:
+                            file_number -= 1
                         with open('Scrapes/usernames.txt','a',encoding='utf-8') as file:
                             file.write(f"{username}\n")                       
                         if want_proxy:
@@ -133,7 +141,7 @@ class Tools:
                         'limit': 100
                     }
             except Exception as e:
-                print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> \n{e}\n')
+                print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {e}')
                 sleep(5)
 
 print(logo)

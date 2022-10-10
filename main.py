@@ -110,11 +110,16 @@ class Tools:
                             proxies = {
                                 "http": f"http://{proxy}"
                             }
-                            r3 = requests.get(url=f'https://discord.com/api/v9/users/{userid}/profile',headers=headers,proxies=proxies, timeout=10)
+                            r3 = requests.get(url=f'https://discord.com/api/v9/users/{userid}/profile',headers=headers, proxies=proxies, timeout=10)
                             try:
                                 userbio = r3.json()['user']['bio']
                             except KeyError:
-                                pass
+                                print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {self.r}No biography')
+                                userbio = False
+                            except requests.exceptions.JSONDecodeError as e:
+                                print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {self.r}Biography Decode Error')
+                                userbio = False
+                                
                         if want_proxy:
                             print(f'{self.b}[{self.p}Seasmash{self.b}] {self.w}[{self.g}+{self.w}] Username, PFP and Bio of the account {self.c}{username}{self.w} are scraped.')
                         else:
@@ -131,7 +136,7 @@ class Tools:
                             file_number -= 1
                         with open('Scrapes/usernames.txt','a',encoding='utf-8') as file:
                             file.write(f"{username}\n")                       
-                        if want_proxy:
+                        if want_proxy and userbio != False:
                             if userbio != '[]' and not "\n" in userbio and not 'discord.gg/' in userbio and "" != userbio and not '.gg/' in userbio:
                                 with open('Scrapes/bio.txt','a',encoding='utf-8') as file:
                                     file.write(f"{userbio}\n")
@@ -145,6 +150,7 @@ class Tools:
                     sleep(10)
                     break
                 else:
+                    print(r.status_code)
                     print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {self.r}{str(e).capitalize()}')
                 sleep(5)
 

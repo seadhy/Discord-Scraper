@@ -108,10 +108,9 @@ class Tools:
                         if want_proxy:
                             proxy = choice(self.proxies)
                             proxies = {
-                                "http": f"http://{proxy}",
-                                "https": f"https://{proxy}"
+                                "http": f"http://{proxy}"
                             }
-                            r3 = requests.get(url=f'https://discord.com/api/v9/users/{userid}/profile',headers=headers,proxies=proxies)
+                            r3 = requests.get(url=f'https://discord.com/api/v9/users/{userid}/profile',headers=headers,proxies=proxies, timeout=10)
                             try:
                                 userbio = r3.json()['user']['bio']
                             except KeyError:
@@ -119,7 +118,7 @@ class Tools:
                         if want_proxy:
                             print(f'{self.b}[{self.p}Seasmash{self.b}] {self.w}[{self.g}+{self.w}] Username, PFP and Bio of the account {self.c}{username}{self.w} are scraped.')
                         else:
-                            print(f'{self.b}[{self.p}Seasmash{self.b}] {self.w}[{self.g}+{self.w}] Username, PFP and Bio of the account {self.c}{username}{self.w} are scraped.')
+                            print(f'{self.b}[{self.p}Seasmash{self.b}] {self.w}[{self.g}+{self.w}] Username and PFP of the account {self.c}{username}{self.w} are scraped.')
 
                         file_number += 1
                         self.scraped_counter += 1
@@ -141,7 +140,12 @@ class Tools:
                         'limit': 100
                     }
             except Exception as e:
-                print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {e}')
+                if 'Unauthorized'in r.text: 
+                    print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {self.r}Token Invalid! Change token in \'config.json\'')
+                    sleep(10)
+                    break
+                else:
+                    print(f'{self.b}[{self.p}Debug Mode{self.b}] {self.w}[{self.y}i{self.w}] Error -> {self.r}{str(e).capitalize()}')
                 sleep(5)
 
 print(logo)
